@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>trein bestuurder</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treinbestuurder - Ritten Logboek</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background-color: #003c75;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+    }
+    nav {
+      background-color: #0061a8;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    nav a:hover {
+      background-color: #004b6d;
+    }
+    .container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .form-container, .history-container, .schedule-container, .messages-container {
+      background-color: white;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #003c75;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #004b6d;
+    }
+    .history-table, .schedule-table, .messages-list {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .history-table th, .history-table td, .schedule-table th, .schedule-table td, .messages-list li {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    .messages-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    .remove-button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .remove-button:hover {
+      background-color: darkred;
+    }
+    .crossed-out {
+      text-decoration: line-through;
+      color: red;
+    }
+    .train-delayed {
+      color: orange;
+      font-weight: bold;
+    }
+    .status-button {
+      background-color: #ffa500;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .status-button:hover {
+      background-color: #e68900;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Treinbestuurder Logboek</h1>
+</header>
+
+<nav>
+  <a href="#new-ride">Nieuwe Rit toevoegen</a>
+  <a href="#history">Mijn Ritgeschiedenis</a>
+  <a href="#schedule">Dienstregeling</a>
+  <a href="#messages">Berichten</a>
+</nav>
+
+<div class="container">
+
+  <!-- Nieuwe Rit Toevoegen -->
+  <section id="new-ride" class="form-container">
+    <h2>Nieuwe Rit toevoegen</h2>
+    <form id="ride-form">
+      <label for="date">Datum</label>
+      <input type="date" id="date" required>
+
+      <label for="time">Om hoelaat</label>
+      <input type="time" id="time" required>
+
+      <label for="train-number">Treinnummer</label>
+      <input type="text" id="train-number" required>
+
+      <label for="route">Traject (Van - Naar)</label>
+      <input type="text" id="route" required>
+
+      <label for="type">Type trein</label>
+      <input type="text" id="type">
+
+      <label for="remarks">Opmerkingen</label>
+      <textarea id="remarks" rows="4"></textarea>
+
+      <button type="submit">Rit toevoegen</button>
+    </form>
+  </section>
+
+  <!-- Ritgeschiedenis -->
+  <section id="history" class="history-container">
+    <h2>Mijn Ritgeschiedenis</h2>
+    <table class="history-table" id="history-table">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Om hoelaat</th>
+          <th>Treinnummer</th>
+          <th>Traject</th>
+          <th>Type trein</th>
+          <th>Opmerkingen</th>
+          <th>Actie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Ritgeschiedenis wordt hier weergegeven -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Dienstregeling -->
+  <section id="schedule" class="schedule-container">
+    <h2>Dienstregeling</h2>
+    <form id="schedule-form">
+      <label for="schedule-train-number">Treinnummer</label>
+      <input type="text" id="schedule-train-number" required>
+
+      <label for="schedule-time">Vertrektijd</label>
+      <input type="time" id="schedule-time" required>
+
+      <label for="schedule-route">Traject</label>
+      <input type="text" id="schedule-route" required>
+
+      <button type="submit">Dienstregeling toevoegen</button>
+    </form>
+
+    <table class="schedule-table" id="schedule-table">
+      <thead>
+        <tr>
+          <th>Treinnummer</th>
+          <th>Vertrektijd</th>
+          <th>Traject</th>
+          <th>Actie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dienstregelingen worden hier weergegeven -->
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+<script>
+  // Functie om ritten op te slaan in LocalStorage
+  function saveRit() {
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
+    const trainNumber = document.getElementById('train-number').value;
+    const route = document.getElementById('route').value;
+    const type = document.getElementById('type').value;
+    const remarks = document.getElementById('remarks').value;
+
+    if (!date || !time || !trainNumber || !route) {
+      alert("Vul alle verplichte velden in.");
+      return;
+    }
+
+    const newRit = {
+      date,
+      time,
+      trainNumber,
+      route,
+      type,
+      remarks
+    };
+
+    let ritten = JSON.parse(localStorage.getItem('ritten')) || [];
+    ritten.push(newRit);
+    localStorage.setItem('ritten', JSON.stringify(ritten));
+
+    document.getElementById('ride-form').reset();
+    loadRitten();
+  }
+
+  // Functie om ritten weer te geven in de ritgeschiedenis
+  function loadRitten() {
+    const ritten = JSON.parse(localStorage.getItem('ritten')) || [];
+    const historyTableBody = document.getElementById('history-table').getElementsByTagName('tbody')[0];
+    historyTableBody.innerHTML = '';
+
+    ritten.forEach((rit, index) => {
+      const row = historyTableBody.insertRow();
+      row.insertCell(0).textContent = rit.date;
+      row.insertCell(1).textContent = rit.time;
+      row.insertCell(2).textContent = rit.trainNumber;
+      row.insertCell(3).textContent = rit.route;
+      row.insertCell(4).textContent = rit.type;
+      row.insertCell(5).textContent = rit.remarks;
+
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Verwijderen';
+      deleteButton.classList.add('remove-button');
+      deleteButton.onclick = function() {
+        deleteRit(index);
+      };
+
+      const actionCell = row.insertCell(6);
+      actionCell.appendChild(deleteButton);
+    });
+  }
+
+  // Functie om een rit te verwijderen uit LocalStorage
+  function deleteRit(index) {
+    let ritten = JSON.parse(localStorage.getItem('ritten')) || [];
+    ritten.splice(index, 1); // Verwijder het item op de opgegeven index
+    localStorage.setItem('ritten', JSON.stringify(ritten));
+    loadRitten(); // Laad de ritten opnieuw
+  }
+
+  // Functie om dienstregelingen op te slaan in LocalStorage
+  function saveDienstregeling() {
+    const trainNumber = document.getElementById('schedule-train-number').value;
+    const time = document.getElementById('schedule-time').value;
+    const route = document.getElementById('schedule-route').value;
+
+    if (!trainNumber || !time || !route) {
+      alert("Vul alle velden in.");
+      return;
+    }
+
+    const newDienstregeling = {
+      trainNumber,
+      time,
+      route
+    };
+
+    let dienstregelingen = JSON.parse(localStorage.getItem('dienstregelingen')) || [];
+    dienstregelingen.push(newDienstregeling);
+    localStorage.setItem('dienstregelingen', JSON.stringify(dienstregelingen));
+
+    document.getElementById('schedule-form').reset();
+    loadDienstregeling();
+  }
+
+  // Functie om dienstregelingen weer te geven op de homepage
+  function loadDienstregeling() {
+    const dienstregelingen = JSON.parse(localStorage.getItem('dienstregelingen')) || [];
+    const scheduleTableBody = document.getElementById('schedule-table').getElementsByTagName('tbody')[0];
+    scheduleTableBody.innerHTML = '';
+
+    dienstregelingen.forEach((dienstregeling, index) => {
+      const row = scheduleTableBody.insertRow();
+
+      const trainCell = row.insertCell(0);
+      const currentTime = new Date();
+      const trainTime = new Date();
+      const [hours, minutes] = dienstregeling.time.split(':');
+      trainTime.setHours(hours, minutes);
+
+      if (trainTime < currentTime) {
+        const delay = Math.floor((currentTime - trainTime) / (1000 * 60)); // Bereken de vertraging in minuten
+        trainCell.innerHTML = `Trein heeft vertraging (+${delay} min)`;
+        row.classList.add('train-delayed');
+      } else {
+        trainCell.textContent = dienstregeling.trainNumber;
+      }
+
+      row.insertCell(1).textContent = dienstregeling.time;
+      row.insertCell(2).textContent = dienstregeling.route;
+
+      const actionCell = row.insertCell(3);
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Verwijderen';
+      deleteButton.classList.add('remove-button');
+      deleteButton.onclick = function() {
+        deleteDienstregeling(index);
+      };
+      actionCell.appendChild(deleteButton);
+    });
+  }
+
+  // Functie om dienstregeling te verwijderen uit LocalStorage
+  function deleteDienstregeling(index) {
+    let dienstregelingen = JSON.parse(localStorage.getItem('dienstregelingen')) || [];
+    dienstregelingen.splice(index, 1); // Verwijder het item op de opgegeven index
+    localStorage.setItem('dienstregelingen', JSON.stringify(dienstregelingen));
+    loadDienstregeling(); // Laad de dienstregelingen opnieuw
+  }
+
+  // Laden van ritten en dienstregelingen bij het openen van de pagina
+  window.onload = function() {
+    loadRitten();
+    loadDienstregeling();
+  };
+
+  // Event listeners voor formuliervelden
+  document.getElementById('ride-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    saveRit();
+  });
+
+  document.getElementById('schedule-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    saveDienstregeling();
+  });
+
+</script>
+
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
